@@ -71,7 +71,6 @@ type ListTransfersParams struct {
 	Offset        int32 `json:"offset"`
 }
 
-// ListTransfers lists all the transfers that a single account sent or received
 func (q *Queries) ListTransfers(ctx context.Context, arg ListTransfersParams) ([]Transfer, error) {
 	rows, err := q.db.QueryContext(ctx, listTransfers,
 		arg.FromAccountID,
