@@ -370,7 +370,7 @@ Create the following two go files in `db/sqlc` directory:
 
   Add `test` command to `Makefile`:
 
-```Makefile
-test:
-  go test -v -cover ./...
-```
+  ```Makefile
+  test:
+    go test -v -cover ./...
+  ```
