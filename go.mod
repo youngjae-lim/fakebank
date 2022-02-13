@@ -8,7 +8,10 @@ require (
 	github.com/stretchr/testify v1.7.0
 )
 
-require github.com/spf13/viper v1.10.1
+require (
+	github.com/golang/mock v1.6.0
+	github.com/spf13/viper v1.10.1
+)
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
