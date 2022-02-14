@@ -11,8 +11,12 @@ import (
 )
 
 func createRandomAccount(t *testing.T) Account {
+	// Since owner column in accounts table refers to username in users table,
+	// we need to create a user first and use the username as an owner name in the accounts table.
+	user := createRandomUser(t)
+
 	arg := CreateAccountParams{
-		Owner:    util.RandomOwner(),
+		Owner:    user.Username,
 		Balance:  util.RandomMoney(),
 		Currency: util.RandomCurrency(),
 	}

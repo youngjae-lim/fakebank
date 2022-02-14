@@ -2,6 +2,8 @@
 
 ## Why mock database?
 
+Because we throughly test DB operations separately in db package, we don't need to test it again when it comes to testing HTTP API. That is, we need to test only API functionality that is communicating to the layer of DB operation. The DB operation can be mocked to isolate our HTTP API test.
+
 1. Independent Tests
 
 - Isolate tests data to avoid conflicts
