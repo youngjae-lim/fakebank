@@ -10,8 +10,16 @@ dropdb:
 migrateup:
 	migrate -path db/migration -database "postgresql://postgres:password@localhost:5432/fake_bank?sslmode=disable" -verbose up
 
+# migrate up the most current one
+migrateup1:
+	migrate -path db/migration -database "postgresql://postgres:password@localhost:5432/fake_bank?sslmode=disable" -verbose up 1
+
 migratedown:
 	migrate -path db/migration -database "postgresql://postgres:password@localhost:5432/fake_bank?sslmode=disable" -verbose down
+
+# migrate down the most latest one
+migratedown1:
+	migrate -path db/migration -database "postgresql://postgres:password@localhost:5432/fake_bank?sslmode=disable" -verbose down 1
 
 sqlc:
 	sqlc generate
@@ -25,4 +33,4 @@ server:
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/youngjae-lim/fakebank/db/sqlc Store	
 
-.PHONY: postgres createdb dropdb migrateup migratedown sqlc test server mock
+.PHONY: postgres createdb dropdb migrateup migrateup1 migratedown migratedown1 sqlc test server mock
