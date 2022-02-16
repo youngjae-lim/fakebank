@@ -19,3 +19,5 @@ Install a package `github.com/golang-jwt/jwt`.
 Create `maker.go`, `payload.go`, and `jwt_maker.go`:
 
 Create `jwt_maker_test.go`
+
+Create `paseto_maker.go` and `paseto_maker_test.go`
