@@ -38,8 +38,8 @@ func NewPayload(username string, duration time.Duration) (*Payload, error) {
 	return payload, nil
 }
 
-// Valid checks if the token payload is valid or not
-// This function will be called internally when we call ParseWithClaims()
+// Valid checks if the token payload is valid or not, throws ErrExpiredToken error if not valid.
+// This function will be called internally when we call either ParseWithClaims() for jwt or CreateToken() for PASETO
 func (payload *Payload) Valid() error {
 	if time.Now().After(payload.ExpiredAt) {
 		return ErrExpiredToken
