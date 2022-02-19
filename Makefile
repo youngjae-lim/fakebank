@@ -8,7 +8,7 @@ dropdb:
 	docker exec --user postgres -it postgres14 dropdb fake_bank
 
 migrateup:
-	migrate -path db/migration -database "postgresql://postgres:password@localhost:5432/fake_bank?sslmode=disable" -verbose up
+	migrate -path db/migration -database "postgresql://postgres:CeUF1K2JSjarIqmsCHVj@fake-bank.cyxurplypeoa.us-east-2.rds.amazonaws.com:5432/fake_bank" -verbose up
 
 # migrate up the most current one
 migrateup1:
