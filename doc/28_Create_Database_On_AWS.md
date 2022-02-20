@@ -13,3 +13,5 @@
     - Duplicate `migrateup` command and rename it to `migrateup_to_aws`.
     - Replace the password and endpoint with those from AWS.
     - Then run the `migrateup_to_aws` command in your local terminal to run migrations in the AWS postgres.
+
+> Note that `migrateup_to_aws` command is for a temporary purpose to test the AWS postgres connection and migration, so it will be deleted later mainly because it exposes a postgres password.
