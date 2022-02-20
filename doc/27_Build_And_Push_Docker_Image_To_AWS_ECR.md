@@ -18,4 +18,6 @@ We will create a new user in AWS using IAM service.
 
 ## Create a Github Actions Secrets for AWS Credentials
 
-We will also create `Action secrets` fo our Github actions for deployment to store `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY` that are used in our `deploy.yml` Github actions. Those two env variables are from one we've just created in `AWS IAM` as a `github-ci` user.
+We will also create `Action secrets` for our Github actions for deployment to store `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY` that are used in our `deploy.yml` Github actions. Those two env variables are from one we've just created in `AWS IAM` as a `github-ci` user.
+
+![Github Secrets for Actions]()

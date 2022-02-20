@@ -10,5 +10,6 @@
 
   - Use these two values to access the database from your local machine using any postgres database client.
   - Also update `Makefile`:
-    - Replace the password and endpoint in the `migrateup` command with those from AWS.
-    - Then run the `migrateup` command in your local terminal to run migrations in the AWS postgres.
+    - Duplicate `migrateup` command and rename it to `migrateup_to_aws`.
+    - Replace the password and endpoint with those from AWS.
+    - Then run the `migrateup_to_aws` command in your local terminal to run migrations in the AWS postgres.
