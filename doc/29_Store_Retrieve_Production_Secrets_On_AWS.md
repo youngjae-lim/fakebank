@@ -234,5 +234,5 @@ To test out the docker image pusehd to AWS ECR, we need to log in ECR first. To 
 
 ```shell
 $ aws ecr get-login-password | docker login --username AWS --password-stdin 168633195351.dkr.ecr.us-east-2.amazonaws.com/fakebank
-$ docker pull 168633195351.dkr.ecr.us-east-2.amazonaws.com/fakebank:b275bb1c1625b0210669e738f666bff3a707d27f
+$ docker pull 168633195351.dkr.ecr.us-east-2.amazonaws.com/fakebank:74b58d4662ad7a8c2c84e783c6d785c5308a75e2
 ```
