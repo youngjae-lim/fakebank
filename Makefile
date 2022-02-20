@@ -7,9 +7,6 @@ createdb:
 dropdb:
 	docker exec --user postgres -it postgres14 dropdb fake_bank
 
-migrateup_to_aws:
-	migrate -path db/migration -database "postgresql://postgres:CeUF1K2JSjarIqmsCHVj@fake-bank.cyxurplypeoa.us-east-2.rds.amazonaws.com:5432/fake_bank" -verbose up
-
 migrateup:
 	migrate -path db/migration -database "postgresql://postgres:password@localhost:5432/fake_bank?sslmode=disable" -verbose up
 
