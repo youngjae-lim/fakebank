@@ -1,11 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
-echo "source environment variables"
-source /app/app.env
-
 echo "run db migration"
+. /app/app.env
 /app/migrate -path /app/migration -database "$DB_SOURCE" -verbose up
 
 echo "start the app"
