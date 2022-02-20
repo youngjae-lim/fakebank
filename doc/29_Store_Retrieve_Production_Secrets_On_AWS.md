@@ -187,5 +187,52 @@ $ aws secretsmanager get-secret-value --secret-id fakebank --query SecretString 
 We will be using the final command right before we build a docker image to be deployed to AWS ECR.
 
 ```yml
+# deploy.yml
 
+name: Deploy to production
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Load AWS secrets and save to app.env
+        run: aws secretsmanager get-secret-value --secret-id fakebank --query SecretString --output text | jq -r `to_entries|map("\(.key)=\(.value)")|.[]` > app.env
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: fakebank
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+```
+
+## TEST Docker Image
+
+To test out the docker image pusehd to AWS ECR, we need to log in ECR first. To do that, run the following command:
+
+```shell
+$ aws ecr get-login-password | docker login --username AWS --password-stdin 168633195351.dkr.ecr.us-east-2.amazonaws.com/fakebank
+$ docker pull 168633195351.dkr.ecr.us-east-2.amazonaws.com/fakebank:b275bb1c1625b0210669e738f666bff3a707d27f
 ```
