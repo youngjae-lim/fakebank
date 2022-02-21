@@ -25,6 +25,6 @@ Low to High:
 3. Repeatable Read: Same read query always returns same result
 4. Serializable: Can achieve same result if execute transactions serially in some order instead of concurrently
 
-![Isolation Levels & Read Phenomena](../doc/images/[Backend #9] Understand isolation levels & read phenomena in MySQL & PostgreSQL via examples 28-36 screenshot.png)
+![Isolation Levels & Read Phenomena](/doc/images/[Backend #9] Understand isolation levels & read phenomena in MySQL & PostgreSQL via examples 28-36 screenshot.png)
 
 In Postgres, there are only 3 isolation levels and it uses dependencies detection techinque to avoid repeatable read. The default isolation level is `Read Committed`.

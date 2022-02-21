@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fakebank-api-deployment
+  labels:
+    app: fakebank-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fakebank-api
+  template:
+    metadata:
+      labels:
+        app: fakebank-api
+    spec:
+      containers:
+        - name: fakebank-api
+          image: 168633195351.dkr.ecr.us-east-2.amazonaws.com/fakebank:c7e5ad78f6c2cc1abf46b16fbd5939572b86da51
+          ports:
+            - containerPort: 8080
