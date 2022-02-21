@@ -6,17 +6,21 @@ What we're going to do in this section, we will rebuild our docker image in a wa
 
 We will be creating the same set of `ENV` variables' keys from `app.env` in AWS Secrets Mananger.
 
-- DB_SOURCE
-- DB_DRIVER
-- SERVER_ADDRESS
-- TOKEN_SYMMETRIC_KEY
-- ACCESS_TOKEN_DURATION
+- DB_SOURCE: must be a postgres connection string form AWS RDS
+- DB_DRIVER: postgres
+- SERVER_ADDRESS: 0.0.0.0:8080
+- TOKEN_SYMMETRIC_KEY: Generate 32 characters long string using `openssl`. See below!
+- ACCESS_TOKEN_DURATION: 15m
 
 ## Generate Token Symmetric Key Using `OpenSSL`
+
+We need to generate a 32 characters long key for one of our environment variables, TOKEN_SYMMETRIC_KEY in `app.env`. The `openssl` cli will help us out to create one.
 
 ```shell
 openssl rand -hex 64 | head -c 32
 ```
+
+> Note that there might be '%' character at the end of the string that will end up make 33 characters. If that's the case, pleasa remove '%' and make sure the length of string is exactly 32 characters.
 
 ## Sample Code to retrieve the secrets in your application
 
@@ -169,22 +173,24 @@ $ brew install jq
 
 ```shell
 # Transform JSON to key, value format like { "key": "foo", "value": "bar"}
-$ aws secretsmanager get-secret-value --secret-id fakebank --query SecretString --output text | jq `to_entries`
+$ aws secretsmanager get-secret-value --secret-id fakebank --query SecretString --output text | jq 'to_entries'
 
 # Extract key and value separately using map()
-$ aws secretsmanager get-secret-value --secret-id fakebank --query SecretString --output text | jq `to_entries|map(.key)`
-$ aws secretsmanager get-secret-value --secret-id fakebank --query SecretString --output text | jq `to_entries|map(.value)`
+$ aws secretsmanager get-secret-value --secret-id fakebank --query SecretString --output text | jq 'to_entries|map(.key)'
+$ aws secretsmanager get-secret-value --secret-id fakebank --query SecretString --output text | jq 'to_entries|map(.value)'
 
 # Extract key and value together linked with = sign
 # -r option removes surrouding dobule quotes
 # pipiing with |.[] removes surrouding square brackets and commas separating each key-value pairs
-$ aws secretsmanager get-secret-value --secret-id fakebank --query SecretString --output text | jq -r `to_entries|map("\(.key)=\(.value)")|.[]`
+$ aws secretsmanager get-secret-value --secret-id fakebank --query SecretString --output text | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]'
 
 # Pipe the final foramt to app.env file
-$ aws secretsmanager get-secret-value --secret-id fakebank --query SecretString --output text | jq -r `to_entries|map("\(.key)=\(.value)")|.[]` > app.env
+$ aws secretsmanager get-secret-value --secret-id fakebank --query SecretString --output text | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]' > app.env
 ```
 
 We will be using the final command right before we build a docker image to be deployed to AWS ECR.
+
+> Please make sure that you use a single quotation mark, not a back tick when it is needed. Otherwise, it will not process any command properly.
 
 ```yml
 # deploy.yml
@@ -216,7 +222,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Load AWS secrets and save to app.env
-        run: aws secretsmanager get-secret-value --secret-id fakebank --query SecretString --output text | jq -r `to_entries|map("\(.key)=\(.value)")|.[]` > app.env
+        run: aws secretsmanager get-secret-value --secret-id fakebank --query SecretString --output text | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]' > app.env
 
       - name: Build, tag, and push image to Amazon ECR
         env:
@@ -233,6 +239,31 @@ jobs:
 To test out the docker image pusehd to AWS ECR, we need to log in ECR first. To do that, run the following command:
 
 ```shell
+# Login to AWS ECR
 $ aws ecr get-login-password | docker login --username AWS --password-stdin 168633195351.dkr.ecr.us-east-2.amazonaws.com/fakebank
-$ docker pull 168633195351.dkr.ecr.us-east-2.amazonaws.com/fakebank:74b58d4662ad7a8c2c84e783c6d785c5308a75e2
+
+# Pull a docker image from AWS ECR
+$ docker pull 168633195351.dkr.ecr.us-east-2.amazonaws.com/fakebank:f2836c02ef182d6ea9081214d4
+b903036983b6e9
+
+# Run a docker container
+$ docker run -p 8080:8080 168633195351.dkr.ecr.us-east-2.amazonaws.com/fakebank:f2836c02ef182d6ea9081214d4
+b903036983b6e9
 ```
+
+## Test Using Postman
+
+Once the docker container is successfully running, you can open up Postman and test it out.
+
+Make `POST` request using `http://locahost:8080/users` with the following JSON body:
+
+```json
+{
+  "username": "johndoe",
+  "full_name": "John Doe",
+  "email": "johndoe@test.com",
+  "password": "whatever"
+}
+```
+
+Once you get a `200 OK` response, open up your postgres DB client and see if the user is created in `users` table.
