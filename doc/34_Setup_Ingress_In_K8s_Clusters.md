@@ -90,7 +90,7 @@ Go to Postman and try to log in as the created user.
 
 ## Ingress class
 
-Last but not least, if you look at the ingress service from `k9s`, there is missing value on `Class` column. Because Ingresses can be implemented by different controllers, often with different configuration, each Ingress should specify a class which is a reference to an IngressClass resource that contains additional configuration including the name of the controller that should implement the class. [Read](kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.1/deploy/static/provider/aws/deploy.yaml)
+Last but not least, if you look at the ingress service from `k9s`, there is missing value on `Class` column. Because Ingresses can be implemented by different controllers, often with different configuration, each Ingress should specify a class which is a reference to an IngressClass resource that contains additional configuration including the name of the controller that should implement the class. [Read](https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.1/deploy/static/provider/aws/deploy.yaml)
 
 Let's add extra configuration to `ingress.yml` for Ingress class:
 
