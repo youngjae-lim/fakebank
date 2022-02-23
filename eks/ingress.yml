@@ -14,7 +14,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: 'api.fake-bank.org'
+    - host: 'api.fake-bank.org' # this assumes that you set A-record with api.fake-bank.org on AWS Route 53
       http:
         paths:
           - pathType: Prefix

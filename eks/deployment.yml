@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
         - name: fakebank-api
-          image: 168633195351.dkr.ecr.us-east-2.amazonaws.com/fakebank:c7e5ad78f6c2cc1abf46b16fbd5939572b86da51
+          image: 168633195351.dkr.ecr.us-east-2.amazonaws.com/fakebank:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
